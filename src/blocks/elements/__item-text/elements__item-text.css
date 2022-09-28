@@ -1,0 +1,11 @@
+.elements__item-text {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  max-width: 282px;
+  justify-content: flex-start;
+  background-color: #fff;
+  border-radius: 0 0 10px 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
