@@ -11,17 +11,30 @@ import { ImagePopup } from './ImagePopup.js';
 import { api } from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { ConfirmDeletePopup } from './ConfirmDeletePopup';
+import {Route} from "react-router-dom";
+import {Register} from "./Register";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
 
+  // Попапы
   const [isEditProfilePopupOpen, handleEditProfileClick] = useState(false);
   const [isAddPlacePopupOpen, handleAddPlaceClick] = useState(false);
   const [isEditAvatarPopupOpen, handleEditAvatarClick] = useState(false);
   const [isConfirmPopupOpen, handleConfirmClick] = useState(false);
   const [selectedCard, handleCardClick] = useState(null);
+  const [deleteCard, setDeleteCard] = useState();
 
+  const closeAllPopups = () => {
+    handleEditProfileClick(false);
+    handleAddPlaceClick(false);
+    handleEditAvatarClick(false);
+    handleConfirmClick(false);
+    handleCardClick(null);
+  };
+
+  // Загрузка с сервера данных о профиле и карточек
   useEffect(() => {
     const initialPromises = Promise.all([
       api.getProfileInfo(),
@@ -37,14 +50,6 @@ function App() {
         console.log(err);
       });
   }, []);
-
-  const closeAllPopups = () => {
-    handleEditProfileClick(false);
-    handleAddPlaceClick(false);
-    handleEditAvatarClick(false);
-    handleConfirmClick(false);
-    handleCardClick(null);
-  };
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUserContext._id);
@@ -99,7 +104,7 @@ function App() {
       })
       .finally(() => closeAllPopups());
   }
-  const [deleteCard, setDeleteCard] = useState();
+
   function handleDeleteCardId(deleteCard) {
     setDeleteCard(deleteCard);
   }
@@ -144,6 +149,9 @@ function App() {
           card={selectedCard}
           onClose={closeAllPopups}
         />
+        <Route path='/sign-up'>
+          <Register />
+        </Route>
       </div>
     </CurrentUserContext.Provider>
   );
