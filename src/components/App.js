@@ -13,10 +13,14 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { ConfirmDeletePopup } from './ConfirmDeletePopup';
 import {Route} from "react-router-dom";
 import {Register} from "./Register";
+import {Login} from "./Login";
+import { AppContext} from "../contexts/AppContext";
+import { ProtectedRoute } from "./ProtectedRoute";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+  const [loggedIn, setLogin] = useState(false)
 
   // Попапы
   const [isEditProfilePopupOpen, handleEditProfileClick] = useState(false);
@@ -110,6 +114,7 @@ function App() {
   }
 
   return (
+    <AppContext.Provider value={{loggedIn, setLogin}}>
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <Header />
@@ -123,7 +128,6 @@ function App() {
           onCardDelete={handleDeleteCardId}
           onTrashClick={handleConfirmClick}
         />
-        <Footer />
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
@@ -152,8 +156,13 @@ function App() {
         <Route path='/sign-up'>
           <Register />
         </Route>
+        <Route path='/sign-in'>
+          <Login />
+        </Route>
+        <Footer />
       </div>
     </CurrentUserContext.Provider>
+    </AppContext.Provider>
   );
 }
 

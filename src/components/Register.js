@@ -6,7 +6,7 @@ export const Register = () => {
   const [password, setPassword] = useState('');
 
   function handleEmailChange(e) {
-    setEmal(e.target.value);
+    setEmail(e.target.value);
   }
 
   function handlePasswordChange(e) {
@@ -23,7 +23,7 @@ export const Register = () => {
   }
 
   return (
-      <form name={`form`} className="form form_type_edit" noValidate>
+      <form name={`form`} className="form form_type_sign-up" noValidate>
         <h3 className="form__title">Регистрация</h3>
         <fieldset className="form__fields">
           <label className="form__input">
@@ -57,10 +57,20 @@ export const Register = () => {
             <span className="form__field-error about-input-error" />
           </label>
         </fieldset>
-        <button type="submit" onClick={handleSubmit} className="form__submit-button form__submit-button_theme_dark" aria-label={''}>
+        <button
+          type="submit"
+          onClick={handleSubmit}
+          className="form__submit-button form__submit-button_theme_dark"
+          aria-label='Зарегистрироваться'
+        >
           Зарегистрироваться
         </button>
-        <Link to='/' className='form__sublink'>Уже зарегистрированы? Войти</Link>
+        <Link
+          to='/'
+          className='form__sublink'
+        >
+          Уже зарегистрированы? Войти
+        </Link>
       </form>
   );
 };
