@@ -22,7 +22,6 @@ class ApiAuth {
       });
   }
 
-
   register(body) {
     return this._fetch('signup', 'POST', body)
   }
@@ -31,36 +30,24 @@ class ApiAuth {
     return this._fetch('signin', 'POST', body)
   }
 
-  getInitialCards() {
-    return this._fetch('cards');
-  }
-
-  getProfileInfo() {
-    return this._fetch('users/me');
-  }
-
-  setProfileInfo(body) {
-    return this._fetch('users/me', 'PATCH', body);
-  }
-
-  setProfileAvatar({ avatar }) {
-    return this._fetch('users/me/avatar', 'PATCH', { avatar });
-  }
-
-  setNewCard(body) {
-    return this._fetch('cards', 'POST', body);
-  }
-
-  deleteCard(id) {
-    return this._fetch(`cards/${id}`, 'DELETE');
-  }
-
-  changeLikeCardStatus(id, isLiked) {
-    if (isLiked) {
-      return this._fetch(`cards/likes/${id}`, 'PUT')
-    } else {
-      return this._fetch(`cards/likes/${id}`, 'DELETE');
-    }
+  getTokenValid() {
+    return fetch(`${this._baseUrl}/users/me`, {
+      method: 'GET',
+      headers: {
+        'content-type': this._content_type,
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: undefined
+    }).then(res => {
+          if (res.ok) {
+            return res.json();
+          }
+          return Promise.reject(`Ошибка: ${res.status}`);
+        }
+      )
+      .then((result) => {
+        return result;
+      });
   }
 }
 
