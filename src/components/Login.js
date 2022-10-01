@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
-import {Link} from "react-router-dom";
+import {Form} from "./Form";
+import {apiAuth} from "../utils/apiAuth";
 
 export const Login = () => {
   const [email, setEmail] = useState('');
@@ -16,15 +17,22 @@ export const Login = () => {
   function handleSubmit(e) {
     e.preventDefault();
 
-    onSignUp({
-      email,
+    apiAuth.login({
       password,
-    });
+      email
+    }).then((data) => {
+      localStorage.setItem('token', data.token);
+      });
   }
 
   return (
-    <form name={`form`} className="form form_type_sign-in" noValidate>
-      <h3 className="form__title">Вход</h3>
+    <Form
+      name='sign-in'
+      title='Вход'
+      onSubmit={handleSubmit}
+      buttonText='Войти'
+      linkText=''
+      >
       <fieldset className="form__fields">
         <label className="form__input">
           <input
@@ -57,19 +65,6 @@ export const Login = () => {
           <span className="form__field-error about-input-error" />
         </label>
       </fieldset>
-      <button
-        type="submit"
-        onClick={handleSubmit}
-        className="form__submit-button form__submit-button_theme_dark"
-        aria-label='Войти'
-      >
-        Войти
-      </button>
-      <Link
-        to='/'
-        className='form__sublink'
-      >
-      </Link>
-    </form>
+    </Form>
   );
 };

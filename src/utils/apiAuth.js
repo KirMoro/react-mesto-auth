@@ -1,15 +1,13 @@
 class ApiAuth {
   constructor(options) {
     this._baseUrl = options.baseUrl;
-    this._headers = options.headers;
-    this._body = options.body;
     this._content_type = 'application/json';
     this._fetch = (link, method = 'GET', body = undefined) => fetch(`${this._baseUrl}/${link}`, {
       method: method,
       headers: {
         'content-type': this._content_type
       },
-      body: JSON.stringify(this._body)
+      body: JSON.stringify({password: body.password, email: body.email})
     })
       .then(res => {
           if (res.ok) {
@@ -22,6 +20,15 @@ class ApiAuth {
       .then((result) => {
         return result;
       });
+  }
+
+
+  register(body) {
+    return this._fetch('signup', 'POST', body)
+  }
+
+  login(body) {
+    return this._fetch('signin', 'POST', body)
   }
 
   getInitialCards() {
@@ -58,9 +65,5 @@ class ApiAuth {
 }
 
 export const apiAuth = new ApiAuth({
-  baseUrl: 'https://auth.nomoreparties.co/',
-  body: {
-    "password": "somepassword",
-    "email": "email@yandex.ru"
-  }
+  baseUrl: 'https://auth.nomoreparties.co',
 });

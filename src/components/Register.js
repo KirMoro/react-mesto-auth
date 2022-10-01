@@ -1,10 +1,13 @@
 import { useState, useContext, useEffect } from 'react';
-import {Link} from "react-router-dom";
 import {Form} from "./Form";
+import {apiAuth} from "../utils/apiAuth";
+import {useHistory} from "react-router-dom";
 
 export const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const history = useHistory();
 
   function handleEmailChange(e) {
     setEmail(e.target.value);
@@ -17,10 +20,10 @@ export const Register = () => {
   function handleSubmit(e) {
     e.preventDefault();
 
-    onSignUp({
-      email,
+    apiAuth.register({
       password,
-    });
+      email
+    })
   }
 
   return (
