@@ -24,6 +24,11 @@ export const Register = () => {
       password,
       email
     })
+    //   .then((res) => {
+    //   if (res) {
+    //
+    //   }
+    // })
   }
 
   return (
