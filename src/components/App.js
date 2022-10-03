@@ -131,6 +131,18 @@ function App() {
     })
   }
 
+  function handleLogin(loginData) {
+    apiAuth.login(loginData)
+      .then((data) => {
+        setLogin(!loggedIn);
+        localStorage.setItem('token', data.token);
+        history.push('/')
+      })
+      .catch((err) => {
+      console.log(err);
+    })
+  }
+
   return (
     <AppContext.Provider value={{loggedIn, setLogin}}>
     <CurrentUserContext.Provider value={currentUser}>
@@ -141,7 +153,7 @@ function App() {
             <Register onRegister={handleRegistration}/>
           </Route>
           <Route path='/sign-in'>
-            <Login />
+            <Login onLogin={handleLogin}/>
           </Route>
           <ProtectedRoute
             path='/'

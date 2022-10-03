@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState } from 'react';
 import {Form} from "./Form";
 
 export const Register = ({ onRegister }) => {

@@ -1,8 +1,7 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState } from 'react';
 import {Form} from "./Form";
-import {apiAuth} from "../utils/apiAuth";
 
-export const Login = () => {
+export const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -17,12 +16,10 @@ export const Login = () => {
   function handleSubmit(e) {
     e.preventDefault();
 
-    apiAuth.login({
+    onLogin({
       password,
       email
-    }).then((data) => {
-      localStorage.setItem('token', data.token);
-      });
+    })
   }
 
   return (
