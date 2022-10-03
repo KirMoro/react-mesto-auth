@@ -30,12 +30,12 @@ class ApiAuth {
     return this._fetch('signin', 'POST', body)
   }
 
-  getTokenValid() {
+  getTokenValid(token) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: 'GET',
       headers: {
         'content-type': this._content_type,
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${token}`
       },
       body: undefined
     }).then(res => {

@@ -22,7 +22,7 @@ import {apiAuth} from "../utils/apiAuth";
 function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
-  const [loggedIn, setLogin] = useState(true);
+  const [loggedIn, setLogin] = useState(false);
   const [isSignUp, setSignUp] = useState(false);
 
   const history = useHistory();
@@ -120,9 +120,10 @@ function App() {
     setDeleteCard(deleteCard);
   }
 
+  // Регистрация пользователя
   function handleRegistration(registrationData) {
     apiAuth.register(registrationData)
-      .then((data) => {
+      .then(() => {
         setSignUp(!isSignUp);
         handleInfoPopupClick(!isInfoPopupOpen);
         history.push('/sign-in');
@@ -131,6 +132,7 @@ function App() {
     })
   }
 
+  // Авторизация пользователя
   function handleLogin(loginData) {
     apiAuth.login(loginData)
       .then((data) => {
@@ -142,6 +144,26 @@ function App() {
       console.log(err);
     })
   }
+
+  // Проверка токена авторизации
+  function tokenCheck() {
+    const token = localStorage.getItem('token')
+    if (token) {
+      apiAuth.getTokenValid(token)
+        .then((data) => {
+          setLogin(!loggedIn);
+          history.push('/')
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+
+  useEffect(() => {
+    tokenCheck()
+  }, []);
+
 
   return (
     <AppContext.Provider value={{loggedIn, setLogin}}>
