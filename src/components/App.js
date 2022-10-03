@@ -11,17 +11,21 @@ import { ImagePopup } from './ImagePopup.js';
 import { api } from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { ConfirmDeletePopup } from './ConfirmDeletePopup';
-import {Route, Switch} from "react-router-dom";
+import {Route, Switch, useHistory} from "react-router-dom";
 import {Register} from "./Register";
 import {Login} from "./Login";
 import { AppContext} from "../contexts/AppContext";
 import { ProtectedRoute } from "./ProtectedRoute";
 import {InfoTooltip} from "./InfoTooltip";
+import {apiAuth} from "../utils/apiAuth";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
-  const [loggedIn, setLogin] = useState(true)
+  const [loggedIn, setLogin] = useState(true);
+  const [isSignUp, setSignUp] = useState(false);
+
+  const history = useHistory();
 
   // Попапы
   const [isEditProfilePopupOpen, handleEditProfileClick] = useState(false);
@@ -29,7 +33,7 @@ function App() {
   const [isEditAvatarPopupOpen, handleEditAvatarClick] = useState(false);
   const [isConfirmPopupOpen, handleConfirmClick] = useState(false);
   const [selectedCard, handleCardClick] = useState(null);
-  const [isConfirmLoginPopupOpen, handleConfirmLoginClick] = useState(false);
+  const [isInfoPopupOpen, handleInfoPopupClick] = useState(false);
   const [deleteCard, setDeleteCard] = useState(null);
 
   const closeAllPopups = () => {
@@ -37,7 +41,7 @@ function App() {
     handleAddPlaceClick(false);
     handleEditAvatarClick(false);
     handleConfirmClick(false);
-    handleConfirmLoginClick(false);
+    handleInfoPopupClick(false);
     handleCardClick(null);
   };
 
@@ -116,6 +120,17 @@ function App() {
     setDeleteCard(deleteCard);
   }
 
+  function handleRegistration(registrationData) {
+    apiAuth.register(registrationData)
+      .then((data) => {
+        setSignUp(!isSignUp);
+        handleInfoPopupClick(!isInfoPopupOpen);
+        history.push('/sign-in');
+      }).catch((err) => {
+      handleInfoPopupClick(!isInfoPopupOpen);
+    })
+  }
+
   return (
     <AppContext.Provider value={{loggedIn, setLogin}}>
     <CurrentUserContext.Provider value={currentUser}>
@@ -123,7 +138,7 @@ function App() {
         <Header />
         <Switch>
           <Route path='/sign-up'>
-            <Register />
+            <Register onRegister={handleRegistration}/>
           </Route>
           <Route path='/sign-in'>
             <Login />
@@ -140,19 +155,7 @@ function App() {
             onCardDelete={handleDeleteCardId}
             onTrashClick={handleConfirmClick}
           />
-          {/*<Main*/}
-          {/*  onEditProfile={handleEditProfileClick}*/}
-          {/*  onAddPlace={handleAddPlaceClick}*/}
-          {/*  onEditAvatar={handleEditAvatarClick}*/}
-          {/*  onCardClick={handleCardClick}*/}
-          {/*  cards={cards}*/}
-          {/*  onCardLike={handleCardLike}*/}
-          {/*  onCardDelete={handleDeleteCardId}*/}
-          {/*  onTrashClick={handleConfirmClick}*/}
-          {/*/>*/}
-
         </Switch>
-
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
@@ -179,7 +182,8 @@ function App() {
           onClose={closeAllPopups}
         />
         <InfoTooltip
-          isOpen={isConfirmLoginPopupOpen}
+          isOpen={isInfoPopupOpen}
+          isSignUp={isSignUp}
           onClose={closeAllPopups}
         />
 

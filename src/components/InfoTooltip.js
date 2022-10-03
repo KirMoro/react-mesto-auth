@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 
-export const InfoTooltip = ({ name, isOpen, onClose, isSignUp }) => (
-  <div className={classNames('popup', `'popup_type_${name}`, { popup_opened: isOpen })}>
+export const InfoTooltip = ({ isOpen, onClose, isSignUp }) => (
+  <div className={classNames('popup', { popup_opened: isOpen })}>
     <div className="popup__container">
       {
         isSignUp ?
