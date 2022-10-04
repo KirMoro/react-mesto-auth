@@ -39,12 +39,12 @@ class ApiAuth {
       },
       body: undefined
     }).then(res => {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(`Ошибка: ${res.status}`);
+        if (res.ok) {
+          return res.json();
         }
-      )
+        return Promise.reject(`Ошибка: ${res.status}`);
+      }
+    )
       .then((result) => {
         return result;
       });

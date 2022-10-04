@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import {useState} from 'react';
 import {Form} from "./Form";
 
-export const Register = ({ onRegister }) => {
+export const Register = ({onRegister}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -44,7 +44,7 @@ export const Register = ({ onRegister }) => {
             onChange={handleEmailChange}
             value={email || ''}
           />
-          <span className="form__field-error name-input-error" />
+          <span className="form__field-error name-input-error"/>
         </label>
         <label className="form__input">
           <input
@@ -59,7 +59,7 @@ export const Register = ({ onRegister }) => {
             onChange={handlePasswordChange}
             value={password || ''}
           />
-          <span className="form__field-error about-input-error" />
+          <span className="form__field-error about-input-error"/>
         </label>
       </fieldset>
     </Form>

@@ -1,21 +1,21 @@
 import '../pages/index.css';
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 // eslint-disable-next-line import/extensions
-import { Header } from './Header.js';
-import { Main } from './Main.js';
-import { Footer } from './Footer.js';
-import { EditProfilePopup } from './EditProfilePopup';
-import { EditAvatarPopup } from './EditAvatarPopup';
-import { AddPlacePopup } from './AddPlacePopup';
-import { ImagePopup } from './ImagePopup.js';
-import { api } from '../utils/api';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { ConfirmDeletePopup } from './ConfirmDeletePopup';
+import {Header} from './Header.js';
+import {Main} from './Main.js';
+import {Footer} from './Footer.js';
+import {EditProfilePopup} from './EditProfilePopup';
+import {EditAvatarPopup} from './EditAvatarPopup';
+import {AddPlacePopup} from './AddPlacePopup';
+import {ImagePopup} from './ImagePopup.js';
+import {api} from '../utils/api';
+import {CurrentUserContext} from '../contexts/CurrentUserContext';
+import {ConfirmDeletePopup} from './ConfirmDeletePopup';
 import {Route, Switch, useHistory} from "react-router-dom";
 import {Register} from "./Register";
 import {Login} from "./Login";
-import { AppContext} from "../contexts/AppContext";
-import { ProtectedRoute } from "./ProtectedRoute";
+import {AppContext} from "../contexts/AppContext";
+import {ProtectedRoute} from "./ProtectedRoute";
 import {InfoTooltip} from "./InfoTooltip";
 import {apiAuth} from "../utils/apiAuth";
 
@@ -24,6 +24,7 @@ function App() {
   const [cards, setCards] = useState([]);
   const [loggedIn, setLogin] = useState(false);
   const [isSignUp, setSignUp] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
 
   const history = useHistory();
 
@@ -141,8 +142,8 @@ function App() {
         history.push('/')
       })
       .catch((err) => {
-      console.log(err);
-    })
+        console.log(err);
+      })
   }
 
   // Проверка токена авторизации
@@ -152,6 +153,7 @@ function App() {
       apiAuth.getTokenValid(token)
         .then((data) => {
           setLogin(!loggedIn);
+          setUserEmail(data.data.email)
           history.push('/')
         })
         .catch((err) => {
@@ -164,66 +166,74 @@ function App() {
     tokenCheck()
   }, []);
 
+  // Выход из системы
+  function signOut() {
+    localStorage.removeItem('token');
+    history.push('/sign-in');
+  }
 
   return (
     <AppContext.Provider value={{loggedIn, setLogin}}>
-    <CurrentUserContext.Provider value={currentUser}>
-      <div className="page">
-        <Header />
-        <Switch>
-          <Route path='/sign-up'>
-            <Register onRegister={handleRegistration}/>
-          </Route>
-          <Route path='/sign-in'>
-            <Login onLogin={handleLogin}/>
-          </Route>
-          <ProtectedRoute
-            path='/'
-            component={Main}
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onEditAvatar={handleEditAvatarClick}
-            onCardClick={handleCardClick}
-            cards={cards}
-            onCardLike={handleCardLike}
-            onCardDelete={handleDeleteCardId}
-            onTrashClick={handleConfirmClick}
+      <CurrentUserContext.Provider value={currentUser}>
+        <div className="page">
+          <Header
+            onClick={signOut}
+            userEmail={userEmail}
           />
-        </Switch>
-        <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
-        />
-        <EditAvatarPopup
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar}
-        />
-        <AddPlacePopup
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          onAddPlace={handleAddPlaceSubmit}
-        />
-        <ConfirmDeletePopup
-          isOpen={isConfirmPopupOpen}
-          onClose={closeAllPopups}
-          onDeletePlace={handleCardDelete}
-          deleteCard={deleteCard}
-        />
-        <ImagePopup
-          card={selectedCard}
-          onClose={closeAllPopups}
-        />
-        <InfoTooltip
-          isOpen={isInfoPopupOpen}
-          isSignUp={isSignUp}
-          onClose={closeAllPopups}
-        />
+          <Switch>
+            <Route path='/sign-up'>
+              <Register onRegister={handleRegistration}/>
+            </Route>
+            <Route path='/sign-in'>
+              <Login onLogin={handleLogin}/>
+            </Route>
+            <ProtectedRoute
+              path='/'
+              component={Main}
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onEditAvatar={handleEditAvatarClick}
+              onCardClick={handleCardClick}
+              cards={cards}
+              onCardLike={handleCardLike}
+              onCardDelete={handleDeleteCardId}
+              onTrashClick={handleConfirmClick}
+            />
+          </Switch>
+          <EditProfilePopup
+            isOpen={isEditProfilePopupOpen}
+            onClose={closeAllPopups}
+            onUpdateUser={handleUpdateUser}
+          />
+          <EditAvatarPopup
+            isOpen={isEditAvatarPopupOpen}
+            onClose={closeAllPopups}
+            onUpdateAvatar={handleUpdateAvatar}
+          />
+          <AddPlacePopup
+            isOpen={isAddPlacePopupOpen}
+            onClose={closeAllPopups}
+            onAddPlace={handleAddPlaceSubmit}
+          />
+          <ConfirmDeletePopup
+            isOpen={isConfirmPopupOpen}
+            onClose={closeAllPopups}
+            onDeletePlace={handleCardDelete}
+            deleteCard={deleteCard}
+          />
+          <ImagePopup
+            card={selectedCard}
+            onClose={closeAllPopups}
+          />
+          <InfoTooltip
+            isOpen={isInfoPopupOpen}
+            isSignUp={isSignUp}
+            onClose={closeAllPopups}
+          />
 
-        <Footer />
-      </div>
-    </CurrentUserContext.Provider>
+          <Footer/>
+        </div>
+      </CurrentUserContext.Provider>
     </AppContext.Provider>
   );
 }
