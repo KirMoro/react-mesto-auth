@@ -2,24 +2,21 @@ import {useState} from 'react';
 import {Form} from "./Form";
 
 export const Login = ({onLogin}) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
-  function handleEmailChange(e) {
-    setEmail(e.target.value);
-  }
+  const [values, setValues] = useState({})
 
-  function handlePasswordChange(e) {
-    setPassword(e.target.value);
+  const handleChange = (event) => {
+    const { name, value } = event.target
+    setValues((prev) => ({
+      ...prev,
+      [name]: value
+    }))
   }
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    onLogin({
-      password,
-      email
-    })
+    onLogin(values)
   }
 
   return (
@@ -27,6 +24,7 @@ export const Login = ({onLogin}) => {
       name='sign-in'
       title='Вход'
       onSubmit={handleSubmit}
+      ariaLabel='Войти'
       buttonText='Войти'
       linkText=''
     >
@@ -41,8 +39,7 @@ export const Login = ({onLogin}) => {
             minLength="2"
             maxLength="40"
             required
-            onChange={handleEmailChange}
-            value={email || ''}
+            onChange={handleChange}
           />
           <span className="form__field-error name-input-error"/>
         </label>
@@ -56,8 +53,7 @@ export const Login = ({onLogin}) => {
             minLength="2"
             maxLength="200"
             required
-            onChange={handlePasswordChange}
-            value={password || ''}
+            onChange={handleChange}
           />
           <span className="form__field-error about-input-error"/>
         </label>

@@ -2,24 +2,20 @@ import {useState} from 'react';
 import {Form} from "./Form";
 
 export const Register = ({onRegister}) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [values, setValues] = useState({})
 
-  function handleEmailChange(e) {
-    setEmail(e.target.value);
-  }
-
-  function handlePasswordChange(e) {
-    setPassword(e.target.value);
+  const handleChange = (event) => {
+    const { name, value } = event.target
+    setValues((prev) => ({
+      ...prev,
+      [name]: value
+    }))
   }
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    onRegister({
-      password,
-      email
-    })
+    onRegister(values)
   }
 
   return (
@@ -27,6 +23,7 @@ export const Register = ({onRegister}) => {
       name='sign-up'
       title='Регистрация'
       onSubmit={handleSubmit}
+      ariaLabel='Зарегистрироваться'
       buttonText='Зарегистрироваться'
       linkText='Уже зарегистрированы? Войти'
     >
@@ -41,8 +38,7 @@ export const Register = ({onRegister}) => {
             minLength="2"
             maxLength="40"
             required
-            onChange={handleEmailChange}
-            value={email || ''}
+            onChange={handleChange}
           />
           <span className="form__field-error name-input-error"/>
         </label>
@@ -56,8 +52,7 @@ export const Register = ({onRegister}) => {
             minLength="2"
             maxLength="200"
             required
-            onChange={handlePasswordChange}
-            value={password || ''}
+            onChange={handleChange}
           />
           <span className="form__field-error about-input-error"/>
         </label>

@@ -6,7 +6,7 @@ export const PopupWithForm = ({
   <div className={classNames('popup', `'popup_type_${name}`, { popup_opened: isOpen })}>
     <div className="popup__container">
       <h3 className="popup__title">{title}</h3>
-      <form name={`form-${name}`} className="form form_type_edit" noValidate>
+      <form name={`form-${name}`} className="form form_type_edit">
         {children}
         <button type="submit" onClick={onSubmit} className="form__submit-button" aria-label={buttonText}>
           {buttonText}

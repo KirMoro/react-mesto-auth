@@ -17,7 +17,7 @@ export const Card = ({
   );
 
   function handleClick() {
-    onCardClick(card.link);
+    onCardClick(card);
   }
 
   function handleLikeClick() {

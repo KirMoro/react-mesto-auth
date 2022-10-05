@@ -1,4 +1,3 @@
-import '../pages/index.css';
 import {useEffect, useState} from 'react';
 // eslint-disable-next-line import/extensions
 import {Header} from './Header.js';
@@ -22,7 +21,7 @@ import {apiAuth} from "../utils/apiAuth";
 function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
-  const [loggedIn, setLogin] = useState(false);
+  const [loggedIn, setLogin] = useState(true);
   const [isSignUp, setSignUp] = useState(false);
   const [userEmail, setUserEmail] = useState('');
 
@@ -33,7 +32,8 @@ function App() {
   const [isAddPlacePopupOpen, handleAddPlaceClick] = useState(false);
   const [isEditAvatarPopupOpen, handleEditAvatarClick] = useState(false);
   const [isConfirmPopupOpen, handleConfirmClick] = useState(false);
-  const [selectedCard, handleCardClick] = useState(null);
+  const [isImagePopupOpen, handleImageClick] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
   const [isInfoPopupOpen, handleInfoPopupClick] = useState(false);
   const [deleteCard, setDeleteCard] = useState(null);
 
@@ -43,7 +43,8 @@ function App() {
     handleEditAvatarClick(false);
     handleConfirmClick(false);
     handleInfoPopupClick(false);
-    handleCardClick(null);
+    handleImageClick(false);
+    setSelectedCard({});
   };
 
   // Загрузка с сервера данных о профиле и карточек
@@ -61,7 +62,7 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [loggedIn]);
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUserContext._id);
@@ -79,42 +80,44 @@ function App() {
     api.deleteCard(card._id)
       .then((deleteCard) => {
         setCards((state) => state.filter((c) => c._id !== card._id));
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => closeAllPopups());
   }
 
   function handleUpdateUser(userData) {
     api.setProfileInfo(userData)
       .then((userData) => {
         setCurrentUser(userData);
+        closeAllPopups()
       })
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => closeAllPopups());
   }
 
   function handleUpdateAvatar(userAvatar) {
     api.setProfileAvatar(userAvatar)
-      .then((userData) => setCurrentUser(userData))
+      .then((userData) => {
+        setCurrentUser(userData);
+        closeAllPopups()
+      })
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => closeAllPopups());
   }
 
   function handleAddPlaceSubmit(card) {
     api.setNewCard(card)
       .then((newCard) => {
         setCards([newCard, ...cards]);
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => closeAllPopups());
   }
 
   function handleDeleteCardId(deleteCard) {
@@ -138,11 +141,13 @@ function App() {
     apiAuth.login(loginData)
       .then((data) => {
         setLogin(!loggedIn);
+        setSignUp(!isSignUp);
+        handleInfoPopupClick(!isInfoPopupOpen);
         localStorage.setItem('token', data.token);
         history.push('/')
       })
       .catch((err) => {
-        console.log(err);
+        handleInfoPopupClick(!isInfoPopupOpen);
       })
   }
 
@@ -168,8 +173,15 @@ function App() {
 
   // Выход из системы
   function signOut() {
+    setLogin(!loggedIn);
     localStorage.removeItem('token');
     history.push('/sign-in');
+  }
+
+
+  function handleCardClick(cardData) {
+    setSelectedCard(cardData);
+    handleImageClick(!isImagePopupOpen);
   }
 
   return (
@@ -222,6 +234,7 @@ function App() {
             deleteCard={deleteCard}
           />
           <ImagePopup
+            isOpen={isImagePopupOpen}
             card={selectedCard}
             onClose={closeAllPopups}
           />
