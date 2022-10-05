@@ -21,7 +21,7 @@ import {apiAuth} from "../utils/apiAuth";
 function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
-  const [loggedIn, setLogin] = useState(true);
+  const [loggedIn, setLogin] = useState(false);
   const [isSignUp, setSignUp] = useState(false);
   const [userEmail, setUserEmail] = useState('');
 
