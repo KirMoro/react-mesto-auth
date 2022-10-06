@@ -47,23 +47,6 @@ function App() {
     setSelectedCard({});
   };
 
-  // Загрузка с сервера данных о профиле и карточек
-  useEffect(() => {
-    const initialPromises = Promise.all([
-      api.getProfileInfo(),
-      api.getInitialCards(),
-    ]);
-
-    initialPromises
-      .then(([profile, cardsInfo]) => {
-        setCards(cardsInfo);
-        setCurrentUser(profile);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [loggedIn]);
-
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUserContext._id);
 
@@ -169,6 +152,25 @@ function App() {
 
   useEffect(() => {
     tokenCheck()
+  }, []);
+
+  // Загрузка с сервера данных о профиле и карточек
+  useEffect(() => {
+    if (!loggedIn) {
+      const initialPromises = Promise.all([
+        api.getProfileInfo(),
+        api.getInitialCards(),
+      ]);
+
+      initialPromises
+        .then(([profile, cardsInfo]) => {
+          setCards(cardsInfo);
+          setCurrentUser(profile);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   // Выход из системы
