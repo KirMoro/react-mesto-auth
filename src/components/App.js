@@ -156,7 +156,7 @@ function App() {
 
   // Загрузка с сервера данных о профиле и карточек
   useEffect(() => {
-    if (!loggedIn) {
+    if (loggedIn) {
       const initialPromises = Promise.all([
         api.getProfileInfo(),
         api.getInitialCards(),
@@ -171,7 +171,7 @@ function App() {
           console.log(err);
         });
     }
-  }, []);
+  }, [loggedIn]);
 
   // Выход из системы
   function signOut() {
