@@ -1,31 +1,31 @@
-import {useState} from 'react';
-import {Form} from "./Form";
+import { useState } from 'react';
+import { Form } from './Form';
 
-export const Register = ({onRegister}) => {
-  const [values, setValues] = useState({})
+export const Register = ({ onRegister }) => {
+  const [values, setValues] = useState({});
 
   const handleChange = (event) => {
-    const { name, value } = event.target
+    const { name, value } = event.target;
     setValues((prev) => ({
       ...prev,
-      [name]: value
-    }))
-  }
+      [name]: value,
+    }));
+  };
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    onRegister(values)
+    onRegister(values);
   }
 
   return (
     <Form
-      name='sign-up'
-      title='Регистрация'
+      name="sign-up"
+      title="Регистрация"
       onSubmit={handleSubmit}
-      ariaLabel='Зарегистрироваться'
-      buttonText='Зарегистрироваться'
-      linkText='Уже зарегистрированы? Войти'
+      ariaLabel="Зарегистрироваться"
+      buttonText="Зарегистрироваться"
+      linkText="Уже зарегистрированы? Войти"
     >
       <fieldset className="form__fields">
         <label className="form__input">
@@ -40,7 +40,7 @@ export const Register = ({onRegister}) => {
             required
             onChange={handleChange}
           />
-          <span className="form__field-error name-input-error"/>
+          <span className="form__field-error name-input-error" />
         </label>
         <label className="form__input">
           <input
@@ -54,7 +54,7 @@ export const Register = ({onRegister}) => {
             required
             onChange={handleChange}
           />
-          <span className="form__field-error about-input-error"/>
+          <span className="form__field-error about-input-error" />
         </label>
       </fieldset>
     </Form>

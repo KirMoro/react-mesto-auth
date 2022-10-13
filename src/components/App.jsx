@@ -1,22 +1,25 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 // eslint-disable-next-line import/extensions
-import {Header} from './Header.js';
-import {Main} from './Main.js';
-import {Footer} from './Footer.js';
-import {EditProfilePopup} from './EditProfilePopup';
-import {EditAvatarPopup} from './EditAvatarPopup';
-import {AddPlacePopup} from './AddPlacePopup';
-import {ImagePopup} from './ImagePopup.js';
-import {api} from '../utils/api';
-import {CurrentUserContext} from '../contexts/CurrentUserContext';
-import {ConfirmDeletePopup} from './ConfirmDeletePopup';
-import {Route, Switch, useHistory} from "react-router-dom";
-import {Register} from "./Register";
-import {Login} from "./Login";
-import {AppContext} from "../contexts/AppContext";
-import {ProtectedRoute} from "./ProtectedRoute";
-import {InfoTooltip} from "./InfoTooltip";
-import {apiAuth} from "../utils/apiAuth";
+import { Route, Switch, useHistory } from 'react-router-dom';
+// eslint-disable-next-line import/extensions
+import { Header } from './Header.jsx';
+// eslint-disable-next-line import/extensions
+import { Main } from './Main.jsx';
+// eslint-disable-next-line import/extensions
+import { Footer } from './Footer.jsx';
+import { EditProfilePopup } from './EditProfilePopup';
+import { EditAvatarPopup } from './EditAvatarPopup';
+import { AddPlacePopup } from './AddPlacePopup';
+import { ImagePopup } from './ImagePopup.jsx';
+import { api } from '../utils/api';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { ConfirmDeletePopup } from './ConfirmDeletePopup';
+import { Register } from './Register';
+import { Login } from './Login';
+import { AppContext } from '../contexts/AppContext';
+import { ProtectedRoute } from './ProtectedRoute';
+import { InfoTooltip } from './InfoTooltip';
+import { apiAuth } from '../utils/apiAuth';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
@@ -67,29 +70,29 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
-      })
+      });
   }
 
   function handleUpdateUser(userData) {
     api.setProfileInfo(userData)
       .then((userData) => {
         setCurrentUser(userData);
-        closeAllPopups()
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
-      })
+      });
   }
 
   function handleUpdateAvatar(userAvatar) {
     api.setProfileAvatar(userAvatar)
       .then((userData) => {
         setCurrentUser(userData);
-        closeAllPopups()
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
-      })
+      });
   }
 
   function handleAddPlaceSubmit(card) {
@@ -100,7 +103,7 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
-      })
+      });
   }
 
   function handleDeleteCardId(deleteCard) {
@@ -115,8 +118,8 @@ function App() {
         handleInfoPopupClick(!isInfoPopupOpen);
         history.push('/sign-in');
       }).catch((err) => {
-      handleInfoPopupClick(!isInfoPopupOpen);
-    })
+        handleInfoPopupClick(!isInfoPopupOpen);
+      });
   }
 
   // Авторизация пользователя
@@ -127,22 +130,22 @@ function App() {
         setSignUp(!isSignUp);
         handleInfoPopupClick(!isInfoPopupOpen);
         localStorage.setItem('token', data.token);
-        history.push('/')
+        history.push('/');
       })
       .catch((err) => {
         handleInfoPopupClick(!isInfoPopupOpen);
-      })
+      });
   }
 
   // Проверка токена авторизации
   function tokenCheck() {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token');
     if (token) {
       apiAuth.getTokenValid(token)
         .then((data) => {
           setLogin(!loggedIn);
-          setUserEmail(data.data.email)
-          history.push('/')
+          setUserEmail(data.data.email);
+          history.push('/');
         })
         .catch((err) => {
           console.log(err);
@@ -151,7 +154,7 @@ function App() {
   }
 
   useEffect(() => {
-    tokenCheck()
+    tokenCheck();
   }, []);
 
   // Загрузка с сервера данных о профиле и карточек
@@ -180,14 +183,13 @@ function App() {
     history.push('/sign-in');
   }
 
-
   function handleCardClick(cardData) {
     setSelectedCard(cardData);
     handleImageClick(!isImagePopupOpen);
   }
 
   return (
-    <AppContext.Provider value={{loggedIn, setLogin}}>
+    <AppContext.Provider value={{ loggedIn, setLogin }}>
       <CurrentUserContext.Provider value={currentUser}>
         <div className="page">
           <Header
@@ -195,14 +197,14 @@ function App() {
             userEmail={userEmail}
           />
           <Switch>
-            <Route path='/sign-up'>
-              <Register onRegister={handleRegistration}/>
+            <Route path="/sign-up">
+              <Register onRegister={handleRegistration} />
             </Route>
-            <Route path='/sign-in'>
-              <Login onLogin={handleLogin}/>
+            <Route path="/sign-in">
+              <Login onLogin={handleLogin} />
             </Route>
             <ProtectedRoute
-              path='/'
+              path="/"
               component={Main}
               onEditProfile={handleEditProfileClick}
               onAddPlace={handleAddPlaceClick}
@@ -246,7 +248,7 @@ function App() {
             onClose={closeAllPopups}
           />
 
-          <Footer/>
+          <Footer />
         </div>
       </CurrentUserContext.Provider>
     </AppContext.Provider>

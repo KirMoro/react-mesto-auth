@@ -1,7 +1,7 @@
-import { PopupWithForm } from "./PopupWithForm";
-import {useEffect, useRef} from "react";
+import { useEffect, useRef } from 'react';
+import { PopupWithForm } from './PopupWithForm';
 
-export const EditAvatarPopup = ({isOpen, onClose, onUpdateAvatar}) => {
+export const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar }) => {
   const avatarRef = useRef();
 
   function handleSubmit(e) {
@@ -13,7 +13,7 @@ export const EditAvatarPopup = ({isOpen, onClose, onUpdateAvatar}) => {
   }
 
   useEffect(() => {
-    avatarRef.current.value = ''
+    avatarRef.current.value = '';
   }, [isOpen]);
 
   return (
@@ -40,7 +40,5 @@ export const EditAvatarPopup = ({isOpen, onClose, onUpdateAvatar}) => {
         </label>
       </fieldset>
     </PopupWithForm>
-  )
-}
-
-
+  );
+};
