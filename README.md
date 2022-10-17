@@ -1,3 +1,5 @@
+![Alt text](./screenshot__app_1.png "")
+
 # Приложение «Место + аутентификация»
 ## Технология ReactJS
 
@@ -13,6 +15,10 @@ React route
 Установка и снятие лайков
 
 Удаление карточки
+
+### Скриншоты
+![Alt text](./screenshot__app_2.png "")
+![Alt text](./screenshot__app_3.png "")
 
 
 ### Установка

@@ -20,7 +20,7 @@ export const Header = ({ onClick, userEmail }) => {
           <p className="header__text">{userEmail}</p>
           <NavLink
             to="/"
-            onClick={() => handleClick()}
+            onClick={handleClick}
             activeClassName="header__link_active"
             className="header__link"
           >
